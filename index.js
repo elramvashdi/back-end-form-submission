@@ -3,7 +3,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Route handler for the root URL
-app.get('/', (req, res) => {
+app.post('/', (req, res) => {
   res.status(200).send('Success'); // Return a 200 response with the message "Success"
 });
 

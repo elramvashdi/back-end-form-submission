@@ -34,7 +34,7 @@ app.post('/', async (req, res) => {
         res.setHeader('Content-Disposition', 'attachment; filename=download.pdf');
         
         // Send the PDF file to the user
-        res.send(pdfBuffer);
+        res.download(pdfBuffer);
       }
       else{
         console.error('Error:', response.status);

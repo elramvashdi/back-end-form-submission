@@ -27,14 +27,14 @@ app.post('/', async (req, res) => {
       if (response.ok){
         // Get the PDF data from the URL
         const pdfResponse = await fetch('https://www.orimi.com/pdf-test.pdf');
-        const pdfBuffer = await pdfResponse.arrayBuffer();
+        const pdfBuffer = await streamToBuffer(pdfResponse.body);
         
         // Set the response headers for the PDF file
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', 'attachment; filename=download.pdf');
         
         // Send the PDF file to the user
-        res.download(pdfBuffer, 'download.pdf');
+        res.send(pdfBuffer);
       }
       else{
         console.error('Error:', response.status);
@@ -48,6 +48,16 @@ app.post('/', async (req, res) => {
     res.status(400).json({ error: 'Email not provided' }); // Return an error if email is missing
   }
 });
+
+// Utility function to convert a stream to a buffer
+function streamToBuffer(stream) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    stream.on('data', (chunk) => chunks.push(chunk));
+    stream.on('error', (error) => reject(error));
+    stream.on('end', () => resolve(Buffer.concat(chunks)));
+  });
+}
 
 // Start the server
 app.listen(port, () => {

@@ -16,16 +16,30 @@ app.use(bodyParser.json());
 
 // Route handler for the root URL
 app.post('/', async (req, res) => {
-  const email  = new URLSearchParams( req.body ).toString();; // Assuming the email is sent as part of the request body
+  const email  = new URLSearchParams( req.body ).toString(); // Assuming the email is sent as part of the request body
 
   if (email) {
     try {
       // Send the email data as JSON in the request body
-      const response = await fetch(`https://script.google.com/macros/s/AKfycbzO_7BJm9q_OF9dlfVRY5n_VTQ9ZLMUkGOiOhCZ4tm1oxt2wKhBela-k3mvrXVtltlsnw/exec?${ email }`, {
+      const response = await fetch(`https://script.google.com/macros/s/AKfycbyBRW8H1bWV5GTCAfQRzHnYt_1RENkgbr6YmchR-bwYi2QECJmkBJ28zvmOcwlZNO9pUQ/exec?${ email }`, {
         method: 'GET',
       });
-
-      res.status(200).send('Success'); // Return a success response if the request was successful
+      if (response.ok){
+        // Get the PDF data from the URL
+        const pdfResponse = await fetch('https://www.orimi.com/pdf-test.pdf');
+        const pdfBuffer = await pdfResponse.buffer();
+        
+        // Set the response headers for the PDF file
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename=download.pdf');
+        
+        // Send the PDF file to the user
+        res.send(pdfBuffer);
+      }
+      else{
+        console.error('Error:', response.status);
+        res.status(500).json({ error: 'Internal Server Error' }); // Return an error if there was an issue with the request
+      }
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Internal Server Error' }); // Return an error if there was an issue with the request

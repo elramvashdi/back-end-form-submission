@@ -1,6 +1,11 @@
 const express = require('express');
+const cors = require('cors');
+
 const app = express();
 const port = process.env.PORT || 3000;
+
+// Enable CORS for all routes
+app.use(cors());
 
 // Route handler for the root URL
 app.post('/', (req, res) => {

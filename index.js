@@ -31,7 +31,7 @@ app.post('/', async (req, res) => {
         const pdfBuffer = Buffer.from(arrayBuffer);
         
         // Set the response headers for the PDF file
-        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Type', 'application/x-download');
         res.setHeader('Content-Disposition', 'attachment; filename=download.pdf');
         
         // Send the PDF file to the user
@@ -50,16 +50,6 @@ app.post('/', async (req, res) => {
     res.status(400).json({ error: 'Email not provided' }); // Return an error if email is missing
   }
 });
-
-// Utility function to convert a stream to a buffer
-function streamToBuffer(stream) {
-  return new Promise((resolve, reject) => {
-    const chunks = [];
-    stream.on('data', (chunk) => chunks.push(chunk));
-    stream.on('error', (error) => reject(error));
-    stream.on('end', () => resolve(Buffer.concat(chunks)));
-  });
-}
 
 // Start the server
 app.listen(port, () => {

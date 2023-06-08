@@ -25,18 +25,14 @@ app.post('/', async (req, res) => {
         method: 'GET',
       });
       if (response.ok){
-        // Get the PDF data from the URL
-        const pdfResponse = await fetch('https://www.orimi.com/pdf-test.pdf');
-        const arrayBuffer = await pdfResponse.arrayBuffer();
-        const pdfBuffer = Buffer.from(arrayBuffer);
-        
-        // Set the response headers for the PDF file
-        res.setHeader('Content-Type', 'application/x-download');
-        res.setHeader('Content-Disposition', 'attachment; filename=download.pdf');
-        
-        // Send the PDF file to the user
-        res.attachment('download.pdf');
-        res.send(pdfBuffer);
+        const link = 'https://www.orimi.com/pdf-test.pdf'; // Replace with your desired link
+        const javascriptCode = `
+            window.open("${link}", "_blank");
+        `;
+      
+        // Send the response containing the JavaScript code
+        res.send(javascriptCode);
+
       }
       else{
         console.error('Error:', response.status);

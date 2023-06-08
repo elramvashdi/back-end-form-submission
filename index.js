@@ -27,13 +27,15 @@ app.post('/', async (req, res) => {
       if (response.ok){
         // Get the PDF data from the URL
         const pdfResponse = await fetch('https://www.orimi.com/pdf-test.pdf');
-        const pdfBuffer = await streamToBuffer(pdfResponse.body);
+        const arrayBuffer = await pdfResponse.arrayBuffer();
+        const pdfBuffer = Buffer.from(arrayBuffer);
         
         // Set the response headers for the PDF file
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', 'attachment; filename=download.pdf');
         
         // Send the PDF file to the user
+        res.attachment('download.pdf');
         res.send(pdfBuffer);
       }
       else{

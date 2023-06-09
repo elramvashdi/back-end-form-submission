@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import fetch from 'node-fetch';
+import { downloadFile } from './utils/downloadFile.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -24,14 +25,14 @@ app.post('/', async (req, res) => {
       const response = await fetch(`https://script.google.com/macros/s/AKfycbyBRW8H1bWV5GTCAfQRzHnYt_1RENkgbr6YmchR-bwYi2QECJmkBJ28zvmOcwlZNO9pUQ/exec?${ email }`, {
         method: 'GET',
       });
-      if (response.ok){
-        const link = 'https://www.orimi.com/pdf-test.pdf'; // Replace with your desired link
-        const javascriptCode = `
-            window.open("${link}", "_blank");
-        `;
       
+      const link = 'https://www.orimi.com/pdf-test.pdf';
+      const fileName = 'pdffile';
+
+      if (response.ok){
+        const downloadPdfCode = downloadFile(link,fileName);
         // Send the response containing the JavaScript code
-        res.send(javascriptCode);
+        res.send(downloadPdfCode);
 
       }
       else{

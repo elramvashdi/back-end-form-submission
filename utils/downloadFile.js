@@ -1,10 +1,14 @@
 export const downloadFile =  (url,fileName) =>{
   return `
-    const aTag = document.createElement('a');
-    aTag.href = ' ${url} '
-    aTag.setAttribute('download', ' ${fileName} ')
-    document.body.appendChild(aTag);
-    aTag.click();
-    aTag.remove();
-    `
+    fetch(url).then(data => {
+      data.blob().then((blobFile)=> {
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(blobFile);
+        a.setAttribute("download", filename);
+        a.click();
+        a.remove();
+      }
+    );
+    });
+  `
     }

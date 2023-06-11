@@ -26,7 +26,7 @@ app.post('/', async (req, res) => {
         method: 'GET',
       });
       
-      const link = 'https://www.orimi.com/pdf-test.pdf';
+      const link = 'https://uploads-ssl.webflow.com/5f7e0f9d75fee6f6f546df46/63f36e80cdf34e35f9c70bb9_note-taking.pdf';
       const fileName = 'pdffile';
 
       if (response.ok){
